@@ -1,4 +1,5 @@
 module addsub(
+input bit clock,
 input logic [63:0] operandA,
 input logic [63:0] operandB,
 input logic add,
@@ -13,11 +14,17 @@ logic [10:0] exponentA, exponentB;
 logic [10:0] exponentdiff;
 logic [53:0] mantissaResult,mantissaResult1;
 logic [10:0] exponentResult;
+logic [63:0] Result;
+
+always_ff@(posedge clock)
+  begin
+  result<=Result;
+  end
 
 always_comb
   begin
   if(operandA[62:52]=='b1 || operandA[62:52]=='b1)  //check if any exponent is 2047; If yes operand is NaN or infinity
-    result='bx;
+    Result='bx;
   else
     begin
     if(operandA[62:0] < operandB[62:0])   //check if A>B; If not then swap A and B 
@@ -64,7 +71,8 @@ always_comb
       mantissaResult=mantissaA+(~mantissaB)+1;
       end
 
-    result={signA,exponentResult,mantissaResult[51:0]};
+    Result={signA,exponentResult,mantissaResult[51:0]};
+
     end 
   end
 
