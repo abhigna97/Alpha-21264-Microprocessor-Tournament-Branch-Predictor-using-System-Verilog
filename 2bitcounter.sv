@@ -11,7 +11,7 @@ typedef enum {SNT, WNT, WT, ST} state;
 state currentState, nextState;
 // out outcome;
 
-assign outcome = (currentState==WT | currentState==ST) ? NTAKEN : TAKEN;
+  assign outcome = (currentState==WT | currentState==ST) ? TAKEN : NTAKEN;
 
 always_ff@(posedge clock)
 if(!resetN)
