@@ -14,7 +14,7 @@ state currentState, nextState;
 assign GPresult = (currentState==WT | currentState==ST) ? TAKEN : NTAKEN;
 
 always_ff@(posedge clock or posedge reset)
-  if(!reset)
+  if(reset)
     currentState <= SNT;
   else
     currentState <= nextState;
