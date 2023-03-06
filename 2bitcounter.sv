@@ -2,7 +2,7 @@ module Global2BitFSM(
 input        clock,
 input        reset,
 input        BranchTaken,
-output logic GPreset
+output logic GPresult
 );
 
 localparam NTAKEN=0, TAKEN=1;
@@ -24,7 +24,7 @@ always_comb begin
     SNT:  nextState = (BranchTaken) ? WNT : SNT; 
     WNT:  nextState = (BranchTaken) ? WT  : SNT; 
     WT :  nextState = (BranchTaken) ? ST  : WNT; 
-    ST :  nextState = (BranchTaken) ? ST  : WNT; 
+    ST :  nextState = (BranchTaken) ? ST  : WT; 
   endcase
 end
 
