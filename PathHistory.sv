@@ -2,13 +2,16 @@ module PathHistory (
   input        clock,
   input        reset,
   input        BranchTaken,                   // outcome
-  output logic [7:0] PHistory
+  output logic [11:0] PHistory
 );
+
+// localparam N=12;
 
 always_ff@(posedge clock or posedge reset)
   if (reset)
-    PHistory <= 8'b00000000; 
+    PHistory <= '0; 
   else
-    PHistory <= {PHistory[6:0], BranchTaken}; // shift right and update with outcome
+    PHistory <= {PHistory[10:0], BranchTaken}; // shift right and update with outcome
 
 endmodule
+
