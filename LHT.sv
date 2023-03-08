@@ -1,7 +1,7 @@
 module LHT(clock,reset,BranchTaken,LHresult);
 
     input logic clock,reset,BranchTaken;
-    output logic LHresult;
+    output logic [9:0] LHresult;
   
     logic [9:0] LocalHistory='b0;
   
