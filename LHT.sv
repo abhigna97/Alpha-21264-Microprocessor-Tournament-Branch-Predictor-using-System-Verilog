@@ -7,7 +7,7 @@ module LHT(clock,reset,BranchTaken,LHresult);
   
     always @ (posedge clock or posedge reset) begin
         if(reset) LocalHistory<='b0;
-        else LocalHistory<={BranchTaken,LocalHistory[9:1]};
+        else LocalHistory<={LocalHistory[8:0],BranchTaken};
     end
   
     assign LHresult = LocalHistory;
