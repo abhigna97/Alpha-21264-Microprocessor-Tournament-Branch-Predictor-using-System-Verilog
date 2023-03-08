@@ -12,7 +12,7 @@ assign prediction = (currentState==L0 || currentState==L1) ? 0 : 1; // 0-local, 
 
 always_ff@(posedge clock)
     if(reset)
-        currentState <= L0;
+        currentState <= L1;
     else
         currentState <= nextState;
 
