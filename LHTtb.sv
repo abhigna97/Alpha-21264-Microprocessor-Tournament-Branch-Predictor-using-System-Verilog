@@ -2,11 +2,10 @@
 module LHTtb;
   
     logic clock,reset,BranchTaken;
-  	logic [9:0] LHresult;
+    logic [9:0] LHresult;
+    logic [9:0] LHideal;
   
-  	logic [9:0] LHideal;
-  
-  	LHT DUT(clock,reset,BranchTaken,LHresult);
+    LHT DUT(clock,reset,BranchTaken,LHresult);
   
     initial begin
         clock=0;
@@ -29,7 +28,7 @@ module LHTtb;
     	if(LHresult!==LHideal) $display("ERROR: %b %b",LHresult,LHideal);
     endtask
   
-  	initial begin
+    initial begin
         RESETLHT();
     	RESETLHT();
     	RESETLHT();
