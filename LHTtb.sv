@@ -24,7 +24,7 @@ module LHTtb;
         reset=1'b0;
     	BranchTaken=x;
    	 	@(negedge clock);
-    	LHideal=LHideal>>1 | BranchTaken<<9;
+    	LHideal=LHideal<<1 | BranchTaken;
     	if(LHresult!==LHideal) $display("ERROR: %b %b",LHresult,LHideal);
     endtask
   
