@@ -2,30 +2,39 @@ module Global2BitFSM(
 input        clock,
 input        reset,
 input        BranchTaken,
+input logic [11:0] PathHistory,
 output logic GPresult
 );
 
-localparam NTAKEN=0, TAKEN=1;
+logic GPresult1;
+logic [1:0] GP [4095:0]= '{default:'0};
 
-typedef enum {SNT, WNT, WT, ST} state;
-
-state currentState, nextState;
-
-assign GPresult = (currentState==WT | currentState==ST) ? TAKEN : NTAKEN;
+always_comb  begin
+  if(reset)                   GPresult= GPresult1;
+  else if (GP[PathHistory]>1) GPresult=1;
+  else                        GPresult=0;
+end
 
 always_ff@(posedge clock or posedge reset)
-  if(reset)
-    currentState <= SNT;
-  else
-    currentState <= nextState;
-
-always_comb begin
-  unique case(currentState)
-    SNT:  nextState = (BranchTaken) ? WNT : SNT; 
-    WNT:  nextState = (BranchTaken) ? WT  : SNT; 
-    WT :  nextState = (BranchTaken) ? ST  : WNT; 
-    ST :  nextState = (BranchTaken) ? ST  : WT; 
-  endcase
-end
+  begin
+  if(reset) 
+    begin  
+    GPresult1<=1'b0; 
+    GP[PathHistory]<='0; 
+    end
+  else 
+    begin
+    if(GP[PathHistory]>1)
+      begin
+      if(BranchTaken) GP[PathHistory]<= GP[PathHistory]<3 ? GP[PathHistory]+1'b1 : GP[PathHistory];
+      else            GP[PathHistory]<= GP[PathHistory]-1'b1;
+      end
+    else 
+      begin
+      if(!BranchTaken) GP[PathHistory]<= GP[PathHistory]>0 ? GP[PathHistory]-1'b1 : GP[PathHistory];
+      else             GP[PathHistory]<= GP[PathHistory]+1'b1;
+      end
+    end
+  end
 
 endmodule
