@@ -25,6 +25,8 @@ module Localdesign(clock,reset,PC,BranchTaken,BranchResult);
 	   // LHTprev<=LHTresult;
         end
     end
+	
+    assign BranchResult = LPTresult>=3? 1:0;
 
   
 endmodule
