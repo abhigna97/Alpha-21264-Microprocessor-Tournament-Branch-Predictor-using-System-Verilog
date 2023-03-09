@@ -17,13 +17,14 @@ module Localdesign(clock,reset,PC,BranchTaken,BranchResult);
 	    foreach(LPT[i]) LPT[i]='b0;
         end
         else begin
+            LPT[LHTresult] <= {LPT[LHTresult][1:0],BranchTaken};
+            LHT[PCprev] <= {LHT[PCprev][8:0],BranchTaken};
       	    LHTresult<=LHT[PC];
       	    LPTresult<=LPT[LHTresult];
-            LHT[PCprev] <= {LHT[PCprev][8:0],BranchTaken};
-            LPT[LHTprev] <= {LPT[LHTprev][1:0],BranchTaken};
             PCprev<=PC;
-	    LHTprev<=LHTresult;
+	   // LHTprev<=LHTresult;
         end
     end
+
   
 endmodule
