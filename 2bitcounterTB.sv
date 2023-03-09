@@ -1,9 +1,10 @@
 module global2bitcounterTB;
   
     logic clock,reset,BranchTaken,GPresult,GPideal;
+    logic [11:0] PathHistroy;
     logic [1:0] count;
   
-    Global2BitFSM DUT(clock,reset,BranchTaken,GPresult);
+    Global2BitFSM DUT(clock,reset,BranchTaken,PathHistroy,GPresult);
   
     initial begin
         clock=0;
@@ -13,6 +14,8 @@ module global2bitcounterTB;
     end
 
     initial begin
+	BranchTaken=0;
+	PathHistroy='1;
         RESETFSM(4);
         repeat(5) update(1);
 	repeat(5) update(0);
@@ -22,7 +25,8 @@ module global2bitcounterTB;
 	update(0); update(1);update(0);
 	update(1);update(0);update(1);update(0);
 	RESETFSM(3);
-	update(1);
+	repeat(2)update(1);
+        @(negedge clock);
 	$stop(); 
 	end
   
@@ -34,7 +38,7 @@ module global2bitcounterTB;
   	repeat(t) begin
 	    GPideal=count<=1 ? 0:1;
     	    @(negedge clock);
-    	    if(GPresult!==0) $display("Reset ERROR");
+    	    if(GPresult!==0) $display("Reset ERROR, %t",$time);
 	end
     endtask
 
@@ -47,8 +51,7 @@ module global2bitcounterTB;
 	endcase
 	GPideal=count<=1 ? 0:1;
 	@(negedge clock);
-	if(GPideal !== GPresult) $display("ERROR");
+	if(GPideal !== GPresult) $display("ERROR, %t",$time);
     endtask
-
 
 endmodule
