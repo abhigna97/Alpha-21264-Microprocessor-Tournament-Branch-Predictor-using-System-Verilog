@@ -4,11 +4,12 @@ module AlphaBranchPredictor(clock,reset,PC,BranchTaken,BranchResult);
     output logic BranchResult;
   
     logic ChoiceBit,GlobalBit;
-    logic LocalBit;
+    logic LocalBit,PredictedBranch;
   
     Globaldesign GX(clock,reset,BranchTaken,PredictedBranch,GlobalBit,ChoiceBit);
     Localdesign LX(clock,reset,PC,BranchTaken,LocalBit);
   
-    assign BranchResult = ChoiceBit ? GlobalBit : LocalBit;
+    assign PredictedBranch = ChoiceBit ? GlobalBit : LocalBit;
+    assign BranchResult=PredictedBranch;
   
 endmodule
