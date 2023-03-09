@@ -13,8 +13,8 @@ module Localdesign(clock,reset,PC,BranchTaken,BranchResult);
     always_ff @(posedge clock or posedge reset) begin
  
         if(reset) begin
-      	    foreach(LHT[i]) LHT[i]='b0; 
-	    foreach(LPT[i]) LPT[i]='b0;
+	    foreach(LHT[i]) LHT[i]<='b0; 
+	    foreach(LPT[i]) LPT[i]<='b0;
         end
         else begin
             LPT[LHTresult] <= {LPT[LHTresult][1:0],BranchTaken};
