@@ -6,6 +6,7 @@ module AlphaBranchPredictor_TB;
   logic [31:0] PC;
   logic BranchTaken;
   logic [31:0] PredictedBranch;
+  
 
   AlphaBranchPredictor dut(.clock(clock), .reset(reset), .PC(PC),
                           .BranchTaken(BranchTaken), .PredictedBranch(PredictedBranch));
