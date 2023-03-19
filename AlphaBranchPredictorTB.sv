@@ -4,7 +4,7 @@ logic [9:0] PC;
 
 AlphaBranchPredictor A1(clock,reset,PC,BranchTaken,PredictedBranch);
 
-always #5 clock=~clock;
+always #2 clock=~clock;
 
 initial begin
 clock=0;
