@@ -14,7 +14,7 @@ module PathHistory (
     else begin
         case(state)
         0:  state<=state+1;
-		1:  begin PH <= {BranchTaken,PH[11:1]}; state<=state+1; end
+		1:  begin PH <= {Prediction,PH[11:1]}; state<=state+1; end
     endcase 
     end
     end
