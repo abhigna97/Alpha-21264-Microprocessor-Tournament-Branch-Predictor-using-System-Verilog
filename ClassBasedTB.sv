@@ -16,8 +16,7 @@ module AlphaBranchPredictor_TB;
     // Declare class variables
     rand logic [31:0] PC_rand;
     rand logic BranchTaken_rand;
-    logic [31:0] PredictedBranch_observed;
-    
+    logic [31:0] PredictedBranch_observed;   
     
 
     // Declare coverage variables
