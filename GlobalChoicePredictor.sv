@@ -7,7 +7,6 @@ input logic [11:0] PHresult,
 output logic GPresult,
 output logic CPresult);
 
-
 logic [2:0] GPR,CPR;
 bit gp,lp;
 assign GPresult = GPR > 1 ? 1 : 0;
