@@ -17,6 +17,8 @@ module AlphaBranchPredictor_TB;
     rand logic [31:0] PC_rand;
     rand logic BranchTaken_rand;
     logic [31:0] PredictedBranch_observed;
+    
+    
 
     // Declare coverage variables
     covergroup predictor_coverage;
