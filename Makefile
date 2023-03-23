@@ -1,6 +1,6 @@
 work = work
-RTL = AlphaBranchPredictorTB.sv AlphaBranchPredictor.sv GlobalDesign.sv LocalDesign.sv GlobalChoicePredictor.sv ClockDivider.sv LocalHistoryTable.sv LocalPredictor.sv PathHistory.sv Assertions.sv ReferenceCounter.sv
-TB = AlphaBranchPredictor.sv
+RTL = AlphaBranchPredictor.sv GlobalDesign.sv LocalDesign.sv GlobalChoicePredictor.sv ClockDivider.sv LocalHistoryTable.sv LocalPredictor.sv PathHistory.sv Assertions.sv ReferenceCounter.sv
+TB = AlphaBranchPredictorTB.sv
 
 
 lib:
