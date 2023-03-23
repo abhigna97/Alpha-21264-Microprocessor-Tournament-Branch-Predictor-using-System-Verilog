@@ -6,7 +6,7 @@ output logic PredictedBranch;
  
 // logic prediction;
 
-int count=0;
+logic count=0;
 logic PR;
 logic [9:0] PCprev;
 
@@ -20,9 +20,9 @@ count<=0;
 end 
 else begin 
 
-case(count)
+unique case(count)
 0: begin
-if(PCprev<=PC) PR<=1;
+ if(PC<=PCprev) PR<=1;
 else PR<=0;
   count<=1;
 end
