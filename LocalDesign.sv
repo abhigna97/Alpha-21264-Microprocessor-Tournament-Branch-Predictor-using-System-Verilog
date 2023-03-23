@@ -7,7 +7,7 @@ output logic LDresult);
 
 logic [9:0] LHTresult;
 
-LocalHistoryTable DUT1(clock,reset,PC,BranchTaken,LHTresult);
-LocalPredictor DUT2(clock,reset,BranchTaken,LHTresult,LDresult);
+LocalHistoryTable LHT(clock,reset,PC,BranchTaken,LHTresult);
+LocalPredictor LPT(clock,reset,BranchTaken,LHTresult,LDresult);
 
 endmodule
