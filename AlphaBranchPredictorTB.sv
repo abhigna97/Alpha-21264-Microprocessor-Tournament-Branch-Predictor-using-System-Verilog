@@ -12,10 +12,12 @@ ABP.GD.GCP.GPresult,ABP.GD.GCP.CPresult,ABP.GD.PH.PHresult);
 always #2 clock=~clock;
 
 class constraints;
-	rand bit 	reset;
-	rand logic [9:0] PC;
-	rand logic BranchTaken;
+	rand 	bit 	reset;
+	rand 	logic 	[9:0] PC;
+	rand 	logic 	BranchTaken;
+	logic 			PredictedBranchObserved;
 	int w_PC5bit0_7=60,w_PC5bit8_15=20,w_PC5bit16_23=10,w_PC5bit24_31=10,w_BranchTaken1=80,w_BranchTaken0=20;
+	int samepcval= 1024;
 	constraint rst{								// Constraint to randomize reset with given weights
 		reset dist {1:=1,0:=99};
 	}
@@ -33,6 +35,30 @@ class constraints;
 		reset == 1'b0;
 		BranchTaken dist {1:=w_BranchTaken1,0:=w_BranchTaken0};
 	}
+	constraint samePC{
+		reset == 1'b0;
+		PC inside {samepcval};
+	}
+	
+	covergroup coverage;
+		option.per_instance = 1;		// coverage is collected separately for 
+		option.auto_bin_max = 1024;		// maximum number of auto bins created for each variable
+		option.weight = 1;				// relative importance of this covergroup
+		//option.type = option.with_function;
+		
+		//option.cross = "X";
+
+		PC_bin : coverpoint PC {
+					bins PC_bin[] = {[0:1023]};
+		}
+		BranchTaken_bin : coverpoint BranchTaken {
+					bins BranchTaken_bin[] = {0,1};
+		}
+		PredictedBranch_bin : coverpoint PredictedBranchObserved {
+					bins PredictedBranch_bin[] = {[0:1023]};
+		}
+		cross_PC_BranchTaken_bin : cross PC_bin, BranchTaken_bin;
+    endgroup
 
 endclass
 constraints cnstr;
@@ -43,12 +69,15 @@ cnstr.rst.constraint_mode(0);
 cnstr.PCrepeat9_5.constraint_mode(0);
 cnstr.PCrepeat4_0.constraint_mode(1);
 cnstr.actualbranch.constraint_mode(1);
+cnstr.samePC.constraint_mode(0);
+//cnstr.constraint_mode(0);
 cnstr.w_PC5bit0_7 	= 40;
 cnstr.w_PC5bit8_15 	= 30;
 cnstr.w_PC5bit16_23 = 20;
 cnstr.w_PC5bit24_31 = 10;
 cnstr.w_BranchTaken1= 90;
 cnstr.w_BranchTaken0= 10;
+cnstr.samepcval = 250;
 clock=0;
 resetalpha(4);
   repeat(1000) begin
