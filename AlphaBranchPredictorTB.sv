@@ -33,6 +33,7 @@ class constraints;
 	function void post_randomize();
 	endfunction
 endclass
+constraints cnstr;
 
 always #2 clock=~clock;
 
