@@ -37,6 +37,7 @@ end
 count<=0; 
 end
 endcase
+  // sr<=sr<<1 | ao;
 
 end
 
