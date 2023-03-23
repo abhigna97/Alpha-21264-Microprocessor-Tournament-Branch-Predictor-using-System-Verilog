@@ -15,7 +15,7 @@ end
 
 logic [9:0] ILHT [1023:0]= '{default:'0};
 logic [2:0] ILPT [1023:0]= '{default:'0};
-logic [11:0] IPH;
+  logic [11:0] IPH ='{default:'0};
 logic [1:0] IGP [4095:0]= '{default:'0};
 logic [1:0] ICP [4095:0]= '{default:'0};
 logic IdealBranch,IdealLocal,IdealGlobal,IdealChoice;
@@ -34,7 +34,7 @@ IdealGlobal = IGP[IPH] >= 2 ? 1 : 0;
 IdealChoice = ICP[IPH] >= 2 ? 1 : 0;
 IdealBranch = IdealChoice ? IdealGlobal: IdealLocal;
 repeat(3) @(negedge clock);
-if(IdealBranch!==PredictedBranch) $display("ERROR");
+if(IdealBranch!==PredictedBranch) $display("ERROR output = %b expected = %b",PredictedBranch,IdealBranch);
 
 BranchTaken = ab;
 @(negedge clock);
