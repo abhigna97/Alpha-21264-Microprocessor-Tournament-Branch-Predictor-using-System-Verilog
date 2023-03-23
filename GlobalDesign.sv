@@ -8,7 +8,7 @@ output logic CPresult);
 
 logic [11:0] PHresult;
 
-GlobalChoicePredictor DUT1(clock,reset,BranchTaken,LPresult,PHresult,GPresult,CPresult);
-PathHistory DUT2(clock,reset,BranchTaken,PHresult);
+GlobalChoicePredictor GCP(clock,reset,BranchTaken,LPresult,PHresult,GPresult,CPresult);
+PathHistory PH(clock,reset,BranchTaken,PHresult);
 
 endmodule
