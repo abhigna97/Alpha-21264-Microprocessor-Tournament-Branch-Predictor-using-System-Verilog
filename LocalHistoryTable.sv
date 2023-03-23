@@ -17,7 +17,7 @@ always_ff@(posedge clock or posedge reset)
 	end
     else 
 	begin
-	case(count)
+	unique case(count)
 	0: begin
 	   LHTresult <= LHT[PC];
 	   count <= count + 1;
