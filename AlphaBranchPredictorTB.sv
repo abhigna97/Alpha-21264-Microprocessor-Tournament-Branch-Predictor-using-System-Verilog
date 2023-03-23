@@ -57,14 +57,10 @@ covergroup coverage;
 		bins BranchTaken_bin[] = {0,1};
 	}
 	cross_PC_BranchTaken_bin : cross PC_bin, BranchTaken_bin;
-	/* PredictedBranch_bin : coverpoint PredictedBranch {
-		bins PredictedBranch_bin[] = {0,1};
-	} */
-
 endgroup
 
 constraints cnstr;		// Instance for constraints class
-coverage cvr=new; 		// Instance for coverage class
+coverage cvr;//=new; 		// Instance for coverage class
 
 initial begin: weighted_randomization
 	static int coverpercentage;
@@ -74,7 +70,7 @@ initial begin: weighted_randomization
 	cnstr.PCrepeat4_0.constraint_mode(1);
 	cnstr.actualbranch.constraint_mode(1);
 	cnstr.samePC.constraint_mode(0);
-	cnstr.constraint_mode(0);
+	//cnstr.constraint_mode(0);
 	cnstr.w_PC5bit0_7 	= 40;
 	cnstr.w_PC5bit8_15 	= 30;
 	cnstr.w_PC5bit16_23 = 20;
@@ -90,7 +86,7 @@ initial begin: weighted_randomization
 	$display("FOR + IF LOOP TEST CASE WITH IF CONDITION $random");
 	ForIfLoopTestRandom(500);
 	$display("FOR + IF LOOP TEST CASE WITH IF CONDITION 1");
-	ForIfLoopTest(200,1);
+	ForIfLoopTest(500,1);
 
 	RandomTests(7000);
 
@@ -132,11 +128,11 @@ task updatealpha(input logic [9:0] pc,input logic ab);
 	BranchTaken = ab;
 	@(negedge clock);
 
-	if(PredictedBranch!==BranchTaken) WrongPredict+=1;
-		if(RefPredictedBranch!==BranchTaken) WrongRefPredict+=1;
+	if(PredictedBranch!=BranchTaken) WrongPredict+=1;
+		if(RefPredictedBranch!=BranchTaken) WrongRefPredict+=1;
 
-	ig = BranchTaken===IdealGlobal ? 1 : 0;
-	ip = BranchTaken===IdealLocal ? 1 : 0;
+	ig = BranchTaken==IdealGlobal ? 1 : 0;
+	ip = BranchTaken==IdealLocal ? 1 : 0;
 	unique case({ig,ip})
 	0: ICP[IPH] = ICP[IPH];
 	1: ICP[IPH] = ICP[IPH]>0 ? ICP[IPH]-1 : ICP[IPH];
@@ -164,6 +160,7 @@ task ForLoopTest(input int x);
 	automatic real flt 		= x+1;
 	automatic real fltfail 	= WrongPredict;
 	automatic real reffltfail = WrongRefPredict;
+	cvr = new;
 	repeat(x-1) begin
 		updatealpha(30,1); 
 		cvr.sample(); 
@@ -181,6 +178,7 @@ task ForIfLoopTest(input int x, input logic act);
 	automatic real filt 	= 2*x -1;
 	automatic real filtfail = WrongPredict;
 	automatic real reffiltfail = WrongRefPredict;
+	cvr = new;
 	repeat(x-1) begin
 		updatealpha(70,1);
 		updatealpha(106,act);
@@ -198,6 +196,7 @@ task ForIfLoopTestRandom(input int x);
 	automatic real filt 	= 2*x -1;
 	automatic real filtfail = WrongPredict;
 	automatic real reffiltfail = WrongRefPredict;
+	cvr = new;
 	repeat(x-1) begin
 		updatealpha(70,1);
 		updatealpha(106,$random); 
@@ -215,6 +214,7 @@ task RandomTests(input int x);
 	automatic real Randtest 	= x;
 	automatic real Randfail 	= WrongPredict;
 	automatic real RefRandfail 	= WrongRefPredict;
+	cvr = new;
 	repeat(x) begin
 		RANDOMIZATION_FAILURE:assert(cnstr.randomize());
 		updatealpha(cnstr.PC,cnstr.BranchTaken);
@@ -239,3 +239,5 @@ task RESULTS();
 endtask
 
 endmodule
+
+
