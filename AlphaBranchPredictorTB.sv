@@ -5,7 +5,7 @@ logic [9:0] PC;
 real tests,WrongPredict = 0.0;
 real PredictPercent;
 
-AlphaBranchPredictor A1(clock,reset,PC,BranchTaken,PredictedBranch);
+AlphaBranchPredictor ABP(clock,reset,PC,BranchTaken,PredictedBranch);
 bind AlphaBranchPredictor Assertions ASRT(clock,reset,PC,BranchTaken,PredictedBranch,A1.G1.LPresult);
 
 always #2 clock=~clock;
