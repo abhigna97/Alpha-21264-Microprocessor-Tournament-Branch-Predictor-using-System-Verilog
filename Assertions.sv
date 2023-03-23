@@ -10,11 +10,6 @@ property p_PCstable;
 endproperty
 a_PCstable:assert property(p_PCstable)	else $error("a_PCstable failed");
 
-/* property p_BranchTakenknown;
-	@(negedge clock)	disable iff(reset)	
-endproperty
-a_BranchTakenknown:assert property(p_BranchTakenknown)	else $error("a_BranchTakenknown failed"); */
-
 property p_reset;
 	@(negedge clock) reset	|->		$isunknown(PredictedBranch)
 endproperty
@@ -31,7 +26,7 @@ endproperty
 a_lptresultknown:assert property(p_lptresultknown)	else $error("a_lptresultknown failed");
 
 property p_gpcpknown;
-	@(negedge clock)	disable iff(reset) $changed(PC) |=> ($isunknown({GPresult,CPresult,PHresult}))[*2] |-> !($isunknown({GPresult,CPresult,PHresult}))
+	@(negedge clock)	disable iff(reset) $changed(PC) |=> ($isunknown({GPresult,CPresult})) |=> ##2 !($isunknown({GPresult,CPresult}))
 endproperty
 a_gpcpknown:assert property(p_gpcpknown)	else $error("a_gpcpknown failed");
 
