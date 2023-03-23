@@ -6,7 +6,7 @@ real tests,WrongPredict = 0.0;
 real PredictPercent;
 
 AlphaBranchPredictor ABP(clock,reset,PC,BranchTaken,PredictedBranch);
-bind AlphaBranchPredictor Assertions ASRT(clock,reset,PC,BranchTaken,PredictedBranch,A1.G1.LPresult);
+bind AlphaBranchPredictor Assertions ASRT(clock,reset,PC,BranchTaken,PredictedBranch,ABP.LD.LHT.LHTresult,ABP.LD.LHT.LHTresult);
 
 always #2 clock=~clock;
 
