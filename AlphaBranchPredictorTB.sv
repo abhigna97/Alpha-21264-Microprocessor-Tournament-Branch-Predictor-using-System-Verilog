@@ -19,6 +19,7 @@ class constraints;
 	rand 	logic 	[9:0] PC;
 	rand 	logic 	BranchTaken;
 	logic 			PredictedBranchObserved;
+	
 	int w_PC5bit0_7=60,w_PC5bit8_15=20,w_PC5bit16_23=10,w_PC5bit24_31=10,w_BranchTaken1=80,w_BranchTaken0=20;
 	int samepcval= 1024;
 	constraint rst{								// Constraint to randomize reset with given weights
@@ -44,7 +45,7 @@ class constraints;
 	}
 	
 	covergroup coverage;
-		option.per_instance = 1;		// coverage is collected separately for 
+		option.per_instance = 1;		// coverage is collected separately for each instance
 		option.auto_bin_max = 1024;		// maximum number of auto bins created for each variable
 		option.weight = 1;				// relative importance of this covergroup
 		//option.type = option.with_function;
@@ -58,7 +59,7 @@ class constraints;
 					bins BranchTaken_bin[] = {0,1};
 		}
 		PredictedBranch_bin : coverpoint PredictedBranchObserved {
-					bins PredictedBranch_bin[] = {[0:1023]};
+					bins PredictedBranch_bin[] = {0,1};
 		}
 		cross_PC_BranchTaken_bin : cross PC_bin, BranchTaken_bin;
     endgroup
@@ -118,7 +119,7 @@ IdealGlobal = IGP[IPH] >= 2 ? 1 : 0;
 IdealChoice = ICP[IPH] >= 2 ? 1 : 0;
 IdealBranch = IdealChoice ? IdealGlobal: IdealLocal;
 repeat(3) @(negedge clock);
-if(IdealBranch!==PredictedBranch) $display("ERROR output = %b expected = %b",PredictedBranch,IdealBranch);
+ if(IdealBranch!==PredictedBranch) $display("ERROR output = %b expected = %b",PredictedBranch,IdealBranch);
 
 BranchTaken = ab;
 @(negedge clock);
@@ -128,7 +129,7 @@ if(PredictedBranch!=BranchTaken) WrongPredict+=1;
 
 ig = BranchTaken==IdealGlobal ? 1 : 0;
 ip = BranchTaken==IdealLocal ? 1 : 0;
-case({ig,ip})
+unique case({ig,ip})
 0: ICP[IPH] = ICP[IPH];
 1: ICP[IPH] = ICP[IPH]>0 ? ICP[IPH]-1 : ICP[IPH];
 	2: ICP[IPH] = ICP[IPH]<3 ? ICP[IPH]+1 :ICP[IPH];
