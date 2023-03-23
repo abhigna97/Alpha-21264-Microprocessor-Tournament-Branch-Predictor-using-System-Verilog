@@ -1,8 +1,9 @@
-work = work
-RTL = AlphaBranchPredictor.sv GlobalDesign.sv LocalDesign.sv GlobalChoicePredictor.sv ClockDivider.sv LocalHistoryTable.sv LocalPredictor.sv PathHistory.sv Assertions.sv ReferenceCounter.sv
-TB = AlphaBranchPredictorTB.sv
+work 	= work
+RTL 	= AlphaBranchPredictor.sv GlobalDesign.sv LocalDesign.sv GlobalChoicePredictor.sv ClockDivider.sv LocalHistoryTable.sv LocalPredictor.sv PathHistory.sv Assertions.sv ReferenceCounter.sv
+TB 		= AlphaBranchPredictorTB.sv
 
-
+clear:
+	clear
 lib:
 	vlib $(work)
 
@@ -13,7 +14,7 @@ sim:
 	vsim -c -coverage -do "coverage save -onexit report.ucdb; run -all; quit -sim; vcover report report.ucdb; exit" AlphaBranchPredictorTB
 	
 clean:
-	rm -rf transcript *.vcd work *.log 
+	rm -rf transcript *.vcd work *.log *.ucdb
 
 
-all: clean lib compile sim
+all: clean clear lib compile sim
