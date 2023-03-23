@@ -93,7 +93,7 @@ ip = BranchTaken==IdealLocal ? 1 : 0;
 case({ig,ip})
 0: ICP[IPH] = ICP[IPH];
 1: ICP[IPH] = ICP[IPH]>0 ? ICP[IPH]-1 : ICP[IPH];
-2: ICP[IPH] = ICP[IPH]<7 ? ICP[IPH]+1 :ICP[IPH];
+	2: ICP[IPH] = ICP[IPH]<3 ? ICP[IPH]+1 :ICP[IPH];
 3: ICP[IPH] = ICP[IPH];
 endcase
 
