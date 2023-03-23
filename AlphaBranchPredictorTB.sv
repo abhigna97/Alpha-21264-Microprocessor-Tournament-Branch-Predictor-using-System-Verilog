@@ -3,6 +3,36 @@ logic clock,reset,BranchTaken,PredictedBranch;
 logic [9:0] PC;
 
 AlphaBranchPredictor A1(clock,reset,PC,BranchTaken,PredictedBranch);
+class constraints;
+	rand bit 	reset;
+	rand logic [9:0] PC;
+	rand logic BranchTaken;
+	int w_PC5bit0_7=60,w_PC5bit8_15=20,w_PC5bit16_23=10,w_PC5bit24_31=10,w_BranchTaken1=80,w_BranchTaken0=20;
+	constraint rst{
+		reset dist {1:=1,0:=99};
+	}
+	constraint PCrepeat4_0{
+		reset == 1'b0;
+		PC[9:5] inside {0,31};
+		PC[4:0] dist {[0:7]:= w_PC5bit0_7,[8:15]:=w_PC5bit8_15,[16:23]:=w_PC5bit16_23,[24:31]:=w_PC5bit24_31};
+	}
+	constraint PCrepeat9_5{
+		reset == 1'b0;
+		PC[4:0] inside {0,31};
+		PC[9:5] dist {[0:7]:= w_PC5bit0_7,[8:15]:=w_PC5bit8_15,[16:23]:=w_PC5bit16_23,[24:31]:=w_PC5bit24_31};
+	}
+	constraint actualbranch{
+		reset == 1'b0;
+		BranchTaken dist {1:=w_BranchTaken1,0:=w_BranchTaken0};
+	}
+	task set_random_seed(int seed);
+		//$randomseed();
+	endtask
+	function void post_randomize();
+	endfunction
+	function void post_randomize();
+	endfunction
+endclass
 
 always #2 clock=~clock;
 
