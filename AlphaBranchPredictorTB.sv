@@ -48,9 +48,6 @@ class constraints;
 		option.per_instance = 1;		// coverage is collected separately for each instance
 		option.auto_bin_max = 1024;		// maximum number of auto bins created for each variable
 		option.weight = 1;				// relative importance of this covergroup
-		//option.type = option.with_function;
-		
-		//option.cross = "X";
 
 		PC_bin : coverpoint PC {
 					bins PC_bin[] = {[0:1023]};
