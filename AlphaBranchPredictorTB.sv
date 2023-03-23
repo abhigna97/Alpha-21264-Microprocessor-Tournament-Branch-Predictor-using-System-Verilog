@@ -81,14 +81,19 @@ cnstr.w_BranchTaken0= 10;
 cnstr.samepcval = 250;
 clock=0;
 resetalpha(4);
-  repeat(1000) begin
-RANDOMIZATION_FAILURE:assert(cnstr.randomize());
- updatealpha(cnstr.PC,cnstr.BranchTaken);
-end
-PredictPercent= ((tests-WrongPredict)/tests)*100;
-	RefPredictPercent = ((tests-WrongRefPredict)/tests)*100;
-$display("Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",tests,WrongPredict,PredictPercent);
-	$display("Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",tests,WrongRefPredict,RefPredictPercent);
+
+ForLoopTest(200);
+$display("FOR + IF LOOP TEST CASE WITH IF CONDITION 0 ");
+ForIfLoopTest(200,0);
+$display("FOR + IF LOOP TEST CASE WITH IF CONDITION $random");
+ForIfLoopTestRandom(200);
+$display("FOR + IF LOOP TEST CASE WITH IF CONDITION 1");
+ForIfLoopTest(200,1);
+
+RandomTests(5000);
+
+RESULTS();
+	
 $stop();
 end
 
@@ -147,6 +152,77 @@ IPH=IPH>>1;
 end
 
 repeat(3) @(negedge clock);
+endtask
+
+task ForLoopTest(input int x);
+automatic real flt = x+1;
+automatic real fltfail = WrongPredict;
+automatic real reffltfail = WrongRefPredict;
+repeat(x-1)
+updatealpha(30,1);
+updatealpha(30,0);
+fltfail = WrongPredict-fltfail;
+reffltfail = WrongRefPredict-reffltfail;
+$display("FOR LOOP TEST CASE");
+$display("TOURNAMENT PREDICTOR >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",flt,fltfail,100*(flt-fltfail)/flt);
+$display("REFERENCE PREDICTOR  >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",flt,reffltfail,100*(flt-reffltfail)/flt);
+$display("\n");
+endtask
+
+task ForIfLoopTest(input int x, input logic act);
+automatic real filt = 2*x -1;
+automatic real filtfail = WrongPredict;
+automatic real reffiltfail = WrongRefPredict;
+repeat(x-1) begin
+updatealpha(70,1);
+updatealpha(106,act); end
+updatealpha(70,0);
+filtfail = WrongPredict-filtfail;
+reffiltfail = WrongRefPredict-reffiltfail;
+$display("TOURNAMENT PREDICTOR >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",filt,filtfail,100*(filt-filtfail)/filt);
+$display("REFERENCE PREDICTOR  >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",filt,reffiltfail,100*(filt-reffiltfail)/filt);
+$display("\n");
+endtask
+
+task ForIfLoopTestRandom(input int x);
+automatic real filt = 2*x -1;
+automatic real filtfail = WrongPredict;
+automatic real reffiltfail = WrongRefPredict;
+repeat(x-1) begin
+updatealpha(70,1);
+updatealpha(106,$random); end
+updatealpha(70,0);
+filtfail = WrongPredict-filtfail;
+reffiltfail = WrongRefPredict-reffiltfail;
+$display("TOURNAMENT PREDICTOR >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",filt,filtfail,100*(filt-filtfail)/filt);
+$display("REFERENCE PREDICTOR  >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",filt,reffiltfail,100*(filt-reffiltfail)/filt);
+$display("\n");
+endtask
+
+task RandomTests(input int x);
+automatic real Randtest = x;
+automatic real Randfail = WrongPredict;
+automatic real RefRandfail = WrongRefPredict;
+  repeat(x) begin
+RANDOMIZATION_FAILURE:assert(cnstr.randomize());
+ updatealpha(cnstr.PC,cnstr.BranchTaken);
+end
+Randfail = WrongPredict - Randfail;
+RefRandfail = WrongRefPredict - RefRandfail;
+$display("RANDOM TEST CASE");
+$display("TOURNAMENT PREDICTOR >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",Randtest,Randfail,100*(Randtest-Randfail)/Randtest);
+$display("REFERENCE PREDICTOR  >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",Randtest,RefRandfail,100*(Randtest-RefRandfail)/Randtest);
+$display("\n");
+endtask
+
+
+
+task RESULTS();
+PredictPercent= ((tests-WrongPredict)/tests)*100;
+RefPredictPercent = ((tests-WrongRefPredict)/tests)*100;
+$display("END RESULTS:");
+$display("TOURNAMENT PREDICTOR >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",tests,WrongPredict,PredictPercent);
+$display("REFERENCE PREDICTOR  >> Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",tests,WrongRefPredict,RefPredictPercent);
 endtask
 
 endmodule
