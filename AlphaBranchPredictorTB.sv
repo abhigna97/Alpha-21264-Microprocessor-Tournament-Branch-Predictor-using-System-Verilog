@@ -37,6 +37,21 @@ constraints cnstr;
 
 always #2 clock=~clock;
 
+initial begin: weighted_randomization
+cnstr = new();
+cnstr.rst.constraint_mode(0);
+cnstr.PCrepeat9_5.constraint_mode(0);
+cnstr.PCrepeat4_0.constraint_mode(1);
+cnstr.actualbranch.constraint_mode(1);
+cnstr.w_PC5bit0_7 	= 40;
+cnstr.w_PC5bit8_15 	= 30;
+cnstr.w_PC5bit16_23 = 20;
+cnstr.w_PC5bit24_31 = 10;
+cnstr.w_BranchTaken1= 90;
+cnstr.w_BranchTaken0= 10;
+RANDOMIZATION_FAILURE:assert(cnstr.randomize());	
+end
+
 initial begin
 clock=0;
 resetalpha(4);
