@@ -1,6 +1,7 @@
-module Assertions(clock,reset,PC,BranchTaken,PredictedBranch,LHTresult);
-input 	logic clock,reset,BranchTaken;
+module Assertions(clock,slowclock,reset,PC,BranchTaken,PredictedBranch,LHTresult,LPresult,GPresult,CPresult,PHresult);
+input 	logic clock,slowclock,reset,BranchTaken,LPresult,GPresult,CPresult;
 input 	logic [9:0] LHTresult;
+input 	logic [11:0] PHresult;
 input 	logic [9:0] PC;
 input 	logic PredictedBranch;
 
@@ -25,33 +26,28 @@ endproperty
 a_lhtresultknown:assert property(p_lhtresultknown)	else $error("p_lhtresultknown failed");
 
 property p_lptresultknown;
-	@(negedge clock)	disable iff(reset) $changed(PC) |=> !($isunknown(LHTresult))
+	@(posedge clock)	disable iff(reset) $changed(PC) |=> ##1 !($isunknown(LPresult))
 endproperty
-a_:assert property(p_)	else $error("a_ failed");
+a_lptresultknown:assert property(p_lptresultknown)	else $error("a_lptresultknown failed");
 
-/*property p_;
-	@(negedge clk)	disable iff(reset) 
+property p_gpcpknown;
+	@(negedge clock)	disable iff(reset) $changed(PC) |=> ($isunknown({GPresult,CPresult,PHresult}))[*2] |-> !($isunknown({GPresult,CPresult,PHresult}))
 endproperty
-a_:assert property(p_);	else $error("a_ failed");
+a_gpcpknown:assert property(p_gpcpknown)	else $error("a_gpcpknown failed");
 
-property p_;
-	@(negedge clk)	disable iff(reset) 
+property p_PHstable;
+	@(posedge clock)	disable iff(reset) $changed(PHresult)|=> {2{PHresult == $past(PHresult)}}
 endproperty
-a_:assert property(p_);	else $error("a_ failed");
+a_PHstable:assert property(p_PHstable)	else $error("a_PHstable failed");
 
-property p_;
-	@(negedge clk)	disable iff(reset) 
+property p_slowclk;
+	@(negedge clock)	disable iff(reset) $fell(slowclock) |=> ##1 $rose(slowclock)
 endproperty
-a_:assert property(p_);	else $error("a_ failed");
+a_slowclk:assert property(p_slowclk)	else $error("a_slowclk failed");
 
-property p_;
-	@(negedge clk)	disable iff(reset) 
+property p_predictedknown;
+	@(negedge clock)	disable iff(reset) $changed(PC) |=> ##1 !($isunknown(PredictedBranch))
 endproperty
-a_:assert property(p_);	else $error("a_ failed");
-
-property p_;
-	@(negedge clk)	disable iff(reset) 
-endproperty
-a_:assert property(p_);	else $error("a_ failed"); */
+a_predictedknown:assert property(p_predictedknown)	else $error("a_predictedknown failed");
 
 endmodule
