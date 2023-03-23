@@ -28,7 +28,7 @@ class constraints;
 	task set_random_seed(int seed);
 		//$randomseed();
 	endtask
-	function void post_randomize();
+	function void pre_randomize();
 	endfunction
 	function void post_randomize();
 	endfunction
@@ -49,7 +49,10 @@ cnstr.w_PC5bit16_23 = 20;
 cnstr.w_PC5bit24_31 = 10;
 cnstr.w_BranchTaken1= 90;
 cnstr.w_BranchTaken0= 10;
-RANDOMIZATION_FAILURE:assert(cnstr.randomize());	
+RANDOMIZATION_FAILURE:assert(cnstr.randomize());
+//reset = cnstr.reset;
+//PC = cnstr.PC;
+//BranchTaken = cnstr.BranchTaken	
 end
 
 initial begin
