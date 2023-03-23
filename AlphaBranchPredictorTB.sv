@@ -25,12 +25,13 @@ class constraints;
 		reset == 1'b0;
 		BranchTaken dist {1:=w_BranchTaken1,0:=w_BranchTaken0};
 	}
-	task set_random_seed(int seed);
-		//$randomseed();
-	endtask
 	function void pre_randomize();
+		if($get_initial_random_seed > 0)
+			$display("SEED IS SET BY USER");		// use dafault seed
+		else $display("SEED IS NOT SET BY USER");	// if you set a seed using vsim -sv_seed
 	endfunction
 	function void post_randomize();
+		$display("INPUT SEED:%d",$get_initial_random_seed);
 	endfunction
 endclass
 constraints cnstr;
