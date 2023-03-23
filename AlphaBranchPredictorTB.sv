@@ -2,12 +2,15 @@ module AlphaBranchPredictorTB;
 logic clock,reset,BranchTaken,PredictedBranch;
 logic [9:0] PC;
 
-real tests,WrongPredict = 0.0;
-real PredictPercent;
+real tests,WrongPredict,WrongRefPredict = 0.0;
+real PredictPercent,RefPredictPercent;
+logic RefpredictedBranch;
 
 AlphaBranchPredictor ABP(clock,reset,PC,BranchTaken,PredictedBranch);
 bind AlphaBranchPredictor Assertions ASRT(clock,ABP.CD.clockOUT,reset,PC,BranchTaken,PredictedBranch,ABP.LD.LHT.LHTresult,ABP.LD.LPT.LPresult,
 ABP.GD.GCP.GPresult,ABP.GD.GCP.CPresult,ABP.GD.PH.PHresult);
+	
+	ReferenceCounter RC(ABP.SlowClock,reset,PC,BranchTaken,RefPredictedBranch);
 
 always #2 clock=~clock;
 
@@ -85,7 +88,9 @@ RANDOMIZATION_FAILURE:assert(cnstr.randomize());
  updatealpha(cnstr.PC,cnstr.BranchTaken);
 end
 PredictPercent= ((tests-WrongPredict)/tests)*100;
+	RefPredictPercent = ((tests-WrongRefPredict)/tests)*100;
 $display("Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",tests,WrongPredict,PredictPercent);
+	$display("Tests: %d ,Wrong Predictions: %d, Predict Percentage: %f ",tests,WrongRefPredict,RefPredictPercent);
 $stop();
 end
 
@@ -119,6 +124,7 @@ BranchTaken = ab;
 @(negedge clock);
 
 if(PredictedBranch!=BranchTaken) WrongPredict+=1;
+	if(RefPredictedBranch!=BranchTaken) WrongRefPredict+=1;
 
 ig = BranchTaken==IdealGlobal ? 1 : 0;
 ip = BranchTaken==IdealLocal ? 1 : 0;
