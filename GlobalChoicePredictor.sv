@@ -30,7 +30,7 @@ always_ff@(posedge clock or posedge reset)
 	end
     else
 	begin
-	case(count)
+	unique case(count)
 	0: begin
 	   GPR <= GP[PHresult];
 	   CPR <= CP[PHresult];
@@ -40,13 +40,13 @@ always_ff@(posedge clock or posedge reset)
 	   if(BranchTaken)  GP[PHresult] <= GPR < 3 ? GPR + 1'b1 : GPR;
 	   else             GP[PHresult] <= GPR > 0 ? GPR - 1'b1 : GPR;
 
-           if(gp&lp || !gp&!lp) CP[PHresult] <= CPR;
-	   else if(!gp&lp)      CP[PHresult] <= CPR==0 ? CPR : CPR-1;
-	   else if(gp&!lp)      CP[PHresult] <= CPR==3 ? CPR : CPR+1;
-
-	   CPR <= 'bx;
-	   GPR <= 'bx;
-	   count <= 0;
+	   unique case({gp,lp})
+		0: CP[PHresult] <= CPR;
+		1: CP[PHresult] <= CPR==0 ? CPR : CPR-1;
+		2: CP[PHresult] <= CPR==3 ? CPR : CPR+1;
+		3: CP[PHresult] <= CPR; 
+	   endcase
+	    count<=0;
 	   end
 	endcase
 	end
