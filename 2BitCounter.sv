@@ -1,20 +1,25 @@
 // Code your design here
-module counter(input ao, input clock, output prediction);
-logic prediction;
-  logic [1:0] sr='0;
+module counter(input ao, input clock, input reset, output logic prediction);
+// logic prediction;
+logic [1:0] sr='0;
 int count;
-assign prediction = sr[1];
+
+// assign prediction = sr[1];
 
 
-always_ff@(posedge clock) begin
-  
+always_ff@(posedge clock, posedge reset) begin
+if(reset) begin
+prediction<=0;
+count<=0;
+end else begin 
 case(count)
 0: begin
+  prediction<=sr[1];
   count<=1;
 end
     
 1: begin
-  
+
 if(ao)begin
 if(sr==2'b10)
 sr<=2'b11;
@@ -37,6 +42,7 @@ end
 count<=0; 
 end
 endcase
+end
   // sr<=sr<<1 | ao;
 
 end
