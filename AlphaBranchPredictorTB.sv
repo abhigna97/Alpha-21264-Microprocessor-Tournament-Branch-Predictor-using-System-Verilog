@@ -126,15 +126,15 @@ repeat(3) @(negedge clock);
 BranchTaken = ab;
 @(negedge clock);
 
-if(PredictedBranch!=BranchTaken) WrongPredict+=1;
-	if(RefPredictedBranch!=BranchTaken) WrongRefPredict+=1;
+if(PredictedBranch!==BranchTaken) WrongPredict+=1;
+	if(RefPredictedBranch!==BranchTaken) WrongRefPredict+=1;
 
-ig = BranchTaken==IdealGlobal ? 1 : 0;
-ip = BranchTaken==IdealLocal ? 1 : 0;
+ig = BranchTaken===IdealGlobal ? 1 : 0;
+ip = BranchTaken===IdealLocal ? 1 : 0;
 unique case({ig,ip})
 0: ICP[IPH] = ICP[IPH];
 1: ICP[IPH] = ICP[IPH]>0 ? ICP[IPH]-1 : ICP[IPH];
-	2: ICP[IPH] = ICP[IPH]<3 ? ICP[IPH]+1 :ICP[IPH];
+2: ICP[IPH] = ICP[IPH]<3 ? ICP[IPH]+1 :ICP[IPH];
 3: ICP[IPH] = ICP[IPH];
 endcase
 
@@ -226,5 +226,4 @@ $display("REFERENCE PREDICTOR  >> Tests: %d ,Wrong Predictions: %d, Predict Perc
 endtask
 
 endmodule
-
 
