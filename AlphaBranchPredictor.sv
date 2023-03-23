@@ -6,7 +6,7 @@ output logic PredictedBranch;
 
 logic CP,LP,GP,SlowClock;
 
-ClockDivider C1(clock,SlowClock);
+ClockDivider CD(clock,SlowClock);
 GlobalDesign GD(SlowClock,reset,BranchTaken,LP,GP,CP);
 LocalDesign LD(clock,reset,PC,BranchTaken,LP);
 
