@@ -10,7 +10,7 @@ compile:
 	vlog +cover -source $(RTL) $(TB)
 
 sim:
-	vsim -c -coverage -do "coverage save -onexit report.ucdb; run -all; quit -sim; vcover report report.ucdb" AlphaBranchPredictorTB
+	vsim -c -coverage -do "coverage save -onexit report.ucdb; run -all; quit -sim; vcover report report.ucdb; exit" AlphaBranchPredictorTB
 	
 clean:
 	rm -rf transcript *.vcd work *.log 
